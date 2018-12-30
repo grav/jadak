@@ -151,13 +151,14 @@
                                :or          {accept "*/*"}} :headers
                               body                          :body} :request
                              methods                               :methods
+                             default-produces :produces
                              :as                                   ctx}]
   (assoc ctx :response
              (or response
                  (let [{response-fn :response
                         produces    :produces
                         consumes    :consumes
-                        :or         {produces #{}
+                        :or         {produces (or default-produces #{})
                                      consumes #{}}} (get methods method)
                        produce-content-type (accept->content-type produces accept)]
                    (cond (and (not (empty? body))
