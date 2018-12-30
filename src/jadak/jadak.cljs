@@ -310,7 +310,7 @@
                                             (.writeHead res
                                                         status
                                                         (clj->js (merge headers
-                                                                        (when body {"content-length" (count body)}))))
+                                                                        (when body {"content-length" (js/Buffer.byteLength body)}))))
                                             (when (seq body)
                                               (.write res body))
                                             (.end res)))
