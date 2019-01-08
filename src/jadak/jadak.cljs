@@ -144,6 +144,18 @@
   (or (= origin allowed)
       (= allowed "*")))
 
+(defn- allow-header [methods]
+  (->> methods
+       keys
+       (concat [:options
+                (when (:get methods)
+                  :head)])
+       (remove nil?)
+       sort
+       ((fn [i] (println 'debug i) i))
+       (map (comp s/upper-case name))
+       (s/join ", ")))
+
 (defn handle-client-errors [{response                              :response
                              {:keys                         [method]
                               {accept       "accept"
@@ -169,18 +181,15 @@
                          (= method :options)
                          {:status  200
                           :body    ""
-                          :headers {"allow" (->> methods
-                                                 keys
-                                                 (concat [:options
-                                                          (when (:get methods)
-                                                            :head)])
-                                                 sort
-                                                 (map (comp s/upper-case name))
-                                                 (s/join ", "))}}
+                          :headers {"allow" (allow-header methods)}}
+
                          (and (nil? response-fn)
                               (not= method :options))
+
                          {:status 405
-                          :body   (str "no method for " (clojure.string/upper-case (name method)) "\n")}
+                          :body   (str "no method for " (clojure.string/upper-case (name method)) "\n")
+                          ;; extra service for this specific error
+                          :headers {"allow" (allow-header methods)}}
 
                          (and (nil? produce-content-type)
                               (not (#{:head :options} method)))
