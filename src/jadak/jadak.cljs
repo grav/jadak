@@ -144,7 +144,7 @@
   (or (= origin allowed)
       (= allowed "*")))
 
-(defn- allow-header [methods]
+(defn- allowed-methods [methods]
   (->> methods
        keys
        (concat [:options
@@ -181,7 +181,7 @@
                          (= method :options)
                          {:status  200
                           :body    ""
-                          :headers {"allow" (allow-header methods)}}
+                          :headers {"allow" (allowed-methods methods)}}
 
                          (and (nil? response-fn)
                               (not= method :options))
@@ -189,7 +189,7 @@
                          {:status 405
                           :body   (str "no method for " (clojure.string/upper-case (name method)) "\n")
                           ;; extra service for this specific error
-                          :headers {"allow" (allow-header methods)}}
+                          :headers {"allow" (allowed-methods methods)}}
 
                          (and (nil? produce-content-type)
                               (not (#{:head :options} method)))
