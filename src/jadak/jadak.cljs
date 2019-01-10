@@ -224,29 +224,29 @@
                                       :response (map->Response nil)))
               js/Promise.resolve
               (.then (fn [response]
-                       (if (instance? Response response)
-                         (merge-with merge
-                                     {:headers (when produce-content-type
-                                                 {"content-type" produce-content-type})}
-                                     response)
-                         (map->Response
-                           {:status  200
-                            :headers (when produce-content-type
-                                       {"content-type" produce-content-type})
-                            :body    (if (string? response)
-                                       response
-                                       (str
-                                         (if (= produce-content-type "application/json")
-                                           (js/JSON.stringify (clj->js response
-                                                                       :keyword-fn (fn [k]
-                                                                                     (str (when (namespace k)
-                                                                                            (str (namespace k)
-                                                                                                 "/"))
-                                                                                          (name k)))))
-                                           response)
-                                         "\n"
-                                         (when (= produce-content-type "text/plain")
-                                           "\n")))})))))))
+                       (let [{:keys [headers body]
+                              :as   response} (if (instance? Response response)
+                                                response
+                                                (map->Response {:body response
+                                                                :status 200}))]
+                         (assoc response
+                           :headers (merge headers
+                                           (when produce-content-type
+                                             {"content-type" produce-content-type}))
+                           :body (if (string? body)
+                                   body
+                                   (str
+                                     (if (= produce-content-type "application/json")
+                                       (js/JSON.stringify (clj->js body
+                                                                   :keyword-fn (fn [k]
+                                                                                 (str (when (namespace k)
+                                                                                        (str (namespace k)
+                                                                                             "/"))
+                                                                                      (name k)))))
+                                       body)
+                                     "\n"
+                                     (when (= produce-content-type "text/plain")
+                                       "\n"))))))))))
       ;; todo - move this out into a `handle-cors` stage
       (.then (fn [{:keys [headers]
                    :as   response}]
