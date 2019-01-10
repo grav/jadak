@@ -220,11 +220,15 @@
                :or         {produces #{}
                             consumes #{}}} (get methods method)
               produce-content-type (accept->content-type produces accept)]
-          (-> (response-fn (assoc ctx :body (parse-body body content-type)))
+          (-> (response-fn (assoc ctx :body (parse-body body content-type)
+                                      :response (map->Response nil)))
               js/Promise.resolve
               (.then (fn [response]
                        (if (instance? Response response)
-                         response
+                         (merge-with merge
+                                     {:headers (when produce-content-type
+                                                 {"content-type" produce-content-type})}
+                                     response)
                          (map->Response
                            {:status  200
                             :headers (when produce-content-type
