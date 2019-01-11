@@ -152,7 +152,6 @@
                   :head)])
        (remove nil?)
        sort
-       ((fn [i] (println 'debug i) i))
        (map (comp s/upper-case name))
        (s/join ", ")))
 
