@@ -314,10 +314,6 @@
                                    (.then #(handle-auth %))
                                    (.then handle-client-errors)
                                    (.then handle-request)
-                                   (.catch (fn [ex]
-                                             (js/console.error ex)
-                                             {:status 500
-                                              :body   (str (.-message ex) "\n")}))
                                    (.then (fn [{:keys [status body headers]}]
                                             (.writeHead res
                                                         status
@@ -326,8 +322,14 @@
                                             (when (seq body)
                                               (.write res body))
                                             (.end res)))
-                                   (.catch (fn [e]
-                                             (throw e))))))]
+                                   (.catch (fn [ex]
+                                             (js/console.error ex)
+                                             (let [body (str (.-message ex) "\n")]
+                                               (.writeHead res
+                                                          500
+                                                          (clj->js {"content-length" (js/Buffer.byteLength body)}))
+                                               (.write res body)
+                                               (.end res)))))))]
     (.listen s port)
     {:server s
      :close  (fn [] (.close s))
