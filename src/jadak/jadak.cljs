@@ -220,7 +220,7 @@
                             consumes #{}}} (get methods method)
               produce-content-type (accept->content-type produces accept)]
           (-> (response-fn (assoc ctx :body (parse-body body content-type)
-                                      :response (map->Response nil)))
+                                      :response (map->Response {:status 200})))
               js/Promise.resolve
               (.then (fn [response]
                        (let [{:keys [headers body]
