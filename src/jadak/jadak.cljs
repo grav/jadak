@@ -177,7 +177,8 @@
                          {:status 415
                           :body   (str "Cannot consume " (pr-str content-type) body)}
 
-                         (= method :options)
+                         (and (= method :options)
+                              (not (get methods :options)))
                          {:status  200
                           :body    ""
                           :headers {"allow" (allowed-methods methods)}}
