@@ -256,7 +256,8 @@
                                                  (is-origin-allowed origin allow-origin))
                                         {"access-control-allow-origin" allow-origin})
                                       (when origin
-                                        (->> (for [[k v] (dissoc access-control :allow-origin)]
+                                        (->> (for [[k v] (dissoc access-control :allow-origin)
+                                                   :when (string? v)]
                                                [(str "access-control-" (name k)) v])
                                              (into {})))))))))
 
