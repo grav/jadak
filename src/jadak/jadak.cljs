@@ -141,8 +141,13 @@
   (some? (accept->content-type #{"text/plain"} accept)))
 
 (defn is-origin-allowed [origin allowed]
-  (or (= origin allowed)
-      (= allowed "*")))
+  (cond
+    (string? allowed)
+    (or (= origin allowed)
+        (= allowed "*"))
+
+    (ifn? allowed)
+    (allowed origin)))
 
 (defn- allowed-methods [methods]
   (->> methods
