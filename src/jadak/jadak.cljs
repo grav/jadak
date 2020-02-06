@@ -142,9 +142,11 @@
 
 (defn is-origin-allowed [origin allowed]
   (cond
+    (= "*" allowed)
+    origin
+
     (string? allowed)
-    (or (= origin allowed)
-        (= allowed "*"))
+    (and (= origin allowed) origin)
 
     (ifn? allowed)
     (allowed origin)))
@@ -257,9 +259,9 @@
                    :as   response}]
                (assoc response :headers
                                (merge headers
-                                      (when (and origin
-                                                 (is-origin-allowed origin allow-origin))
-                                        {"access-control-allow-origin" allow-origin})
+                                      (when-let [o (and origin
+                                                        (is-origin-allowed origin allow-origin))]
+                                        {"access-control-allow-origin" o})
                                       (when origin
                                         (->> (for [[k v] (dissoc access-control :allow-origin)
                                                    :when (or (boolean? v)
