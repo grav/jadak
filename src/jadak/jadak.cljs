@@ -99,8 +99,7 @@
   (->> (clojure.string/split cookie-str #";\s?")
        (map #(clojure.string/split % #"="))
        (into {})))
-(defn process-request-parameters [{{cookie-str "cookie"} :headers
-                                   :keys                 [path query body] :as request} routes]
+(defn process-request-parameters [{:keys                 [headers path query body] :as request} routes]
   (let [{handler-fn   :handler
          route-params :route-params
          :or          {handler-fn (constantly {:response {:status 204
@@ -111,7 +110,8 @@
     (assoc ctx
       :resource {:access-control
                  {:realms {"default" access-control}}}
-      :cookies (when cookie-str
+      :cookies (when-let [cookie-str (or (get headers "cookie")
+                                         (get headers "Cookie"))]
                  (cookie-str->map cookie-str))
       :request (merge request
                       {:route-params route-params})
@@ -163,17 +163,19 @@
        (s/join ", ")))
 
 (defn handle-client-errors [{response                              :response
-                             {:keys                         [method]
-                              {accept       "accept"
-                               content-type "content-type"
-                               :or          {accept "*/*"}} :headers
+                             {:keys                         [method headers]
                               body                          :body} :request
                              methods                               :methods
                              default-produces :produces
                              :as                                   ctx}]
   (assoc ctx :response
              (or response
-                 (let [{response-fn :response
+                 (let [accept (or (get headers "accept")
+                                  (get headers "Accept")
+                                  "*/*")
+                       content-type (or (get headers "content-type")
+                                        (get headers "Content-Type"))
+                       {response-fn :response
                         produces    :produces
                         consumes    :consumes
                         :or         {produces (or default-produces #{})
