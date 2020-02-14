@@ -205,6 +205,9 @@
                          {:status 406
                           :body   (str "Cannot accept " (pr-str accept))})))))
 
+(defn is-stream? [v]
+  (instance? (.-Readable (js/require "stream")) v))
+
 (defn handle-request [{response                              :response
                        {:keys                         [method]
                         {accept       "accept"
@@ -242,8 +245,13 @@
                            :headers (merge headers
                                            (when produce-content-type
                                              {"content-type" produce-content-type}))
-                           :body (if (string? body)
+                           :body (cond
+                                   (or
+                                     (is-stream? body)
+                                     (string? body))
                                    body
+
+                                   :else
                                    (str
                                      (if (= produce-content-type "application/json")
                                        (js/JSON.stringify (clj->js body
@@ -327,13 +335,27 @@
                                    (.then handle-client-errors)
                                    (.then handle-request)
                                    (.then (fn [{:keys [status body headers]}]
-                                            (.writeHead res
-                                                        status
-                                                        (clj->js (merge headers
-                                                                        (when body {"content-length" (js/Buffer.byteLength body)}))))
-                                            (when (seq body)
-                                              (.write res body))
-                                            (.end res)))
+                                            (if (is-stream? body)
+                                              (do
+                                                (let [s body]
+                                                  (.on s "open" (fn []
+                                                                  (.writeHead res
+                                                                              status
+                                                                              (clj->js headers))
+                                                                  (.pipe s res)))
+                                                  (.on s "error" (fn [error]
+                                                                   (println 'error error)
+                                                                   (set! (.-statusCode res) 500)
+                                                                   (.end res "error!")))))
+
+                                              (do
+                                                (.writeHead res
+                                                           status
+                                                           (clj->js (merge headers
+                                                                           (when body {"content-length" (js/Buffer.byteLength body)}))))
+                                                (when (seq body)
+                                                  (.write res body))
+                                                (.end res)))))
                                    (.catch (fn [ex]
                                              (js/console.error ex)
                                              (let [body (str (.-message ex) "\n")]
