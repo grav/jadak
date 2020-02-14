@@ -3,19 +3,25 @@
 
 (defonce !state (atom nil))
 
+(defn file [path mimetype]
+  (jadak/resource {:methods {:get
+                             {:produces #{mimetype}
+                              :response (fn []
+                                          (js/Promise.
+                                            (fn [res rej]
+                                              (.readFile (js/require "fs")
+                                                         (str "public/" path)
+                                                         (fn [err data]
+                                                           (if err
+                                                             (rej err)
+                                                             (res data)))))))}}}))
+
 (def routes
   ["/"
-   [["" (jadak/resource {:methods {:get
-                                   {:produces #{"text/html"}
-                                    :response (fn []
-                                                  (js/Promise.
-                                                    (fn [res rej]
-                                                      (.readFile (js/require "fs")
-                                                                 "public/index.html"
-                                                                 (fn [err data]
-                                                                   (if err
-                                                                     (rej err)
-                                                                     (res data)))))))}}})]
+   [["" (file "index.html" "text/html")]
+    ["stylesheet.css" (file "stylesheet.css" "text/css")]
+    ["js/"
+     [["main.js" (file "js/main.js" "application/javascript")]]]
     ["api/"
      [["hello" (jadak/resource {:methods {:get
                                           {:produces #{"text/plain"}

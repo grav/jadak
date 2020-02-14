@@ -9,5 +9,4 @@
         :release {:output-dir "public_release/js"}}
   :api {:target :node-script
         :output-to "target/main.js"
-        :main example-api.core/main}}
- :dev-http {8000 "public"}}
+        :main example-api.core/main}}}
