@@ -19,8 +19,8 @@
 
 (def routes ["/" [["app"
                    [["" (jadak/resource {:methods {:get {:produces #{"text/html"}
-                                                         :response (constantly (template
-                                                                                 (render @appstate)))}}})]
+                                                         :response (fn [_] (template
+                                                                             (render @appstate)))}}})]
                     [["/new/" :title] (jadak/resource {:methods {:post {:produces #{"text/html"}
                                                                         :response (fn [{{{:keys [title]} :route-params} :request}]
                                                                                     (swap! appstate assoc (random-uuid) {:title title
