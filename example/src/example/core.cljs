@@ -6,7 +6,7 @@
 (defn app []
   (let [{:keys [message]} @!app-state]
     [:div [:p (or message "hello")]
-     [:button {:on-click #(-> (js/fetch "http://localhost:9876/api/hello")
+     [:button {:on-click #(-> (js/fetch "/api/hello")
                               (.then (fn [r]
                                        (.text r)))
                               (.then js/alert))}
