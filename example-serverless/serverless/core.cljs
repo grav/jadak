@@ -5,7 +5,7 @@
 (defonce appstate (atom {(random-uuid) {:title "hello" :done? false}}))
 
 (defn template [body]
-  (str "<html><script>function api(url, body){fetch(url, {body: body, method: 'POST'}).then(res => res.text()).then(body => document.getElementById('app').innerHTML=body)}</script><div id='app'>Todo:"
+  (str "<html><script>function api(url, body){fetch(url, {body: body, method: 'POST'}).then(res => res.text()).then(body => document.getElementById('app').innerHTML=body)}</script><div id='app'>Short-term Todo:"
     body
       "</div>New: <input id='new'><button onclick='api(\"/app/new\", document.getElementById(\"new\").value)'>Submit</button></html>"))
 
