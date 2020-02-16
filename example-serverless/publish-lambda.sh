@@ -18,7 +18,6 @@ tree "$package_dir"
 
 ( cd "$package_dir" && zip -qr "$zipfile" . )
 
-#aws lambda delete-function --function-name $fname 2> /dev/null || true
 aws lambda update-function-code --function-name $fname --zip-file "fileb://$zipfile"
 aws lambda update-function-configuration --function-name $fname --layers "$runtime" \
 --runtime provided --role $role --handler serverless.core/aws-lambda-main \

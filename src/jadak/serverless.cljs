@@ -29,7 +29,4 @@
           (.then jadak/handle-auth)
           (.then jadak/handle-client-errors)
           (.then jadak/handle-request)
-          (.then jadak-response->lambda-response)
-          #_(.then (fn [response]
-                     #_(.end (:pg-client @api/state))
-                     (cb nil response)))))
+          (.then jadak-response->lambda-response)))
