@@ -3,7 +3,7 @@
             [jadak.serverless]
             [clojure.pprint]))
 
-(defonce appstate (atom {(random-uuid) {:title "buy milk" :done? false}}))
+(defonce appstate (atom {(random-uuid) {:title "buy tickets" :done? false}}))
 
 (defn template [body]
   (str "<html>
