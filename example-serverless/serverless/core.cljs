@@ -1,5 +1,6 @@
 (ns serverless.core
   (:require [jadak.jadak :as jadak]
+            [jadak.serverless]
             [clojure.pprint]))
 
 (defonce appstate (atom {(random-uuid) {:title "hello" :done? false}}))
@@ -15,7 +16,7 @@
   </script>
   <h2>Short-term Todo</h2>
   <div id='app'>" body "</div>
-  New item: <input id='new'><button onclick='api(\"/app/new\", document.getElementById(\"new\").value)'>Submit</button>
+  New item: <input id='new'><button onclick='api(\"app/new\", document.getElementById(\"new\").value)'>Submit</button>
   </html>"))
 
 
@@ -23,7 +24,7 @@
   (str "<ul>"
        (->> (for [[id {:keys [title done]}] (->> items
                                                  (sort-by (comp :date second)))]
-              (str "<li><label><input type='checkbox'" (when done " checked") " onclick='api(\"/app/done/" (str id) "\")'>" title "</label></li>"))
+              (str "<li><label><input type='checkbox'" (when done " checked") " onclick='api(\"app/done/" (str id) "\")'>" title "</label></li>"))
             (clojure.string/join "\n"))
        "</ul>"))
 
@@ -49,3 +50,5 @@
   (println "Starting server")
   (jadak/listener routes {:port 6789}))
 
+(defn aws-lambda-main [opts]
+  (jadak.serverless/aws-lambda routes opts))
