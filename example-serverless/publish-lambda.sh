@@ -14,8 +14,6 @@ mkdir "$package_dir/lib"
 cp -r ~/.m2/repository/bidi/bidi/2.1.6/bidi-2.1.6.jar "$package_dir/lib"
 cp -r ../src/jadak "$package_dir"
 
-tree "$package_dir"
-
 ( cd "$package_dir" && zip -qr "$zipfile" . )
 
 aws lambda update-function-code --function-name $fname --zip-file "fileb://$zipfile"

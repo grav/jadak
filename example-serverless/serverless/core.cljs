@@ -16,7 +16,7 @@
   </script>
   <h2>Short-term Todo</h2>
   <div id='app'>" body "</div>
-  New item: <input id='new'><button onclick='api(\"app/new\", document.getElementById(\"new\").value)'>Submit</button>
+  New item: <input id='new'><button onclick='api(\"api/new\", document.getElementById(\"new\").value)'>Submit</button>
   </html>"))
 
 
@@ -24,27 +24,26 @@
   (str "<ul>"
        (->> (for [[id {:keys [title done]}] (->> items
                                                  (sort-by (comp :date second)))]
-              (str "<li><label><input type='checkbox'" (when done " checked") " onclick='api(\"app/done/" (str id) "\")'>" title "</label></li>"))
+              (str "<li><label><input type='checkbox'" (when done " checked") " onclick='api(\"api/done/" (str id) "\")'>" title "</label></li>"))
             (clojure.string/join "\n"))
        "</ul>"))
 
 
-(def routes ["/" [["app"
-                   [["" (jadak/resource {:methods {:get {:produces #{"text/html;charset=UTF-8"}
-                                                         :response (fn [_] (template
-                                                                             (render @appstate)))}}})]
-                    ["/new" (jadak/resource {:methods {:post {:consumes #{"text/plain;charset=UTF-8"}
-                                                              :produces #{"text/html"}
+(def routes ["/" [["app" (jadak/resource {:methods {:get {:produces #{"text/html;charset=UTF-8"}
+                                                          :response (fn [_] (template
+                                                                              (render @appstate)))}}})]
+                  ["api/" [["new" (jadak/resource {:methods {:post {:consumes #{"text/plain;charset=UTF-8"}
+                                                                       :produces #{"text/html"}
                                                                        :response (fn [{{:keys [body]} :request}]
                                                                                    (swap! appstate assoc (random-uuid) {:title body
-                                                                                                                        :date (js/Date.)
-                                                                                                                        :done false})
+                                                                                                                        :date  (js/Date.)
+                                                                                                                        :done  false})
                                                                                    (render @appstate))}}})]
 
-                    [["/done/" :id] (jadak/resource {:methods {:post {:produces #{"text/html"}
-                                                                      :response (fn [{{{:keys [id]} :route-params} :request}]
-                                                                                  (swap! appstate update-in [(uuid id) :done] not)
-                                                                                  (render @appstate))}}})]]]]])
+                           [["done/" :id] (jadak/resource {:methods {:post {:produces #{"text/html"}
+                                                                            :response (fn [{{{:keys [id]} :route-params} :request}]
+                                                                                        (swap! appstate update-in [(uuid id) :done] not)
+                                                                                        (render @appstate))}}})]]]]])
 
 (defn -main []
   (println "Starting server")
