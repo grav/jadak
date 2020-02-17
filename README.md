@@ -8,4 +8,6 @@ Among Jadak's features are:
 
 - declarative route definitions (via [Bidi](https://github.com/juxt/bidi))
 - Basic and Cookie authentication
+- CORS support
 - EDN and JSON encoding and decoding
+- easy usage in AWS Lambda
