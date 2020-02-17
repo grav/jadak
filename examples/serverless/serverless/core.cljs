@@ -1,7 +1,6 @@
 (ns serverless.core
   (:require [jadak.jadak :as jadak]
-            [jadak.serverless]
-            [clojure.pprint]))
+            [jadak.serverless]))
 
 (defonce appstate (atom {(random-uuid) {:title "buy tickets" :done? false}}))
 
