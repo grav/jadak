@@ -12,7 +12,7 @@ zipfile="$(mktemp).zip"
 cp -r serverless "$package_dir"
 mkdir "$package_dir/lib"
 cp -r ~/.m2/repository/bidi/bidi/2.1.6/bidi-2.1.6.jar "$package_dir/lib"
-cp -r ../src/jadak "$package_dir"
+cp -r ../../src/jadak "$package_dir"
 
 ( cd "$package_dir" && zip -qr "$zipfile" . )
 

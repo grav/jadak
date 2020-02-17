@@ -45,8 +45,8 @@
                                                                                         (render @appstate))}}})]]]]])
 
 (defn -main []
-  (println "Starting server")
-  (jadak/listener routes {:port 6789}))
+  (jadak/listener routes {:port 6789})
+  (println "Visit http://localhost:6789/app"))
 
 (defn aws-lambda-main [opts]
   (jadak.serverless/aws-lambda routes opts))
