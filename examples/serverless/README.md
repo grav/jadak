@@ -14,12 +14,16 @@ the same service can easily be run locally
 Uses [aws-lumo-cljs-runtime](http://github.com/grav/aws-lumo-cljs-runtime)
 for executing the ClojureScript code on AWS Lambda.
 
-You can try out the example Addhere:
-https://uyqbgczps5.execute-api.eu-west-1.amazonaws.com/dev/app
-
 *) Since Lambdas themselves don't persist state, the items on the 
    todo-list will eventually disappear when the Lambda isn't reused anymore!
+
+### Try it out
+
+You can try out the example here:
+https://uyqbgczps5.execute-api.eu-west-1.amazonaws.com/dev/app
+
+
    
-TODO: 
+### TODO 
 - make `publish` script setup the API gateway
 
