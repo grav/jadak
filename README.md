@@ -1,4 +1,6 @@
 
+# Jadak
+
 Jadak is a web framework for the NodeJS platform implemented in ClojureScript.
 
 [![Clojars Project](https://img.shields.io/clojars/v/jadak.svg)](https://clojars.org/jadak)
@@ -6,6 +8,8 @@ Jadak is a web framework for the NodeJS platform implemented in ClojureScript.
 [![Jadak, jadak og ... jadak](https://img.youtube.com/vi/UcrMKs3xy28/0.jpg)](https://www.youtube.com/watch?v=UcrMKs3xy28&t=0m34s)
 
 <i>Jadak, jadak og ... jadak!</i>
+
+## Features
 
 Jadak implements a subset of the [Yada](https://github.com/juxt/yada) web library.
 Among Jadak's features are:
@@ -16,9 +20,9 @@ Among Jadak's features are:
 - EDN and JSON encoding and decoding
 - easy usage in AWS Lambda
 
-# Getting started
+## Getting started
 
-## Simple example
+### Simple example
 
 Here we create a single route, `/hello` that just responds `"world"`. We then use the `listener` function to 
 serve the route with the built-in http-server in NodeJS:
