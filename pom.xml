@@ -3,18 +3,13 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>jadak</groupId>
   <artifactId>jadak</artifactId>
-  <version>0.1.1</version>
+  <version>0.1.2</version>
   <name>jadak</name>
   <dependencies>
     <dependency>
       <groupId>org.clojure</groupId>
       <artifactId>clojure</artifactId>
-      <version>1.9.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.clojure</groupId>
-      <artifactId>clojurescript</artifactId>
-      <version>1.10.439</version>
+      <version>1.10.1</version>
     </dependency>
     <dependency>
       <groupId>bidi</groupId>
