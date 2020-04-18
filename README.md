@@ -1,5 +1,5 @@
 
-Jadak is a web server for NodeJS implemented in ClojureScript.
+Jadak is a web server for the NodeJS platform implemented in ClojureScript.
 
 [![Clojars Project](https://img.shields.io/clojars/v/jadak.svg)](https://clojars.org/jadak)
 
