@@ -29,7 +29,7 @@ serve the route with the built-in http-server in NodeJS:
 (def routes
   ["/"
    [["hello" (jadak/resource {:methods {:get {:produces #{"text/plain"}
-                                              :response (constantly "world")}}})]]])
+                                              :response (fn [_] "world")}}})]]])
 
 (jadak/listener
   routes
