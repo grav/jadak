@@ -23,7 +23,7 @@ Among Jadak's features are:
 Here we create a single route, `/hello` that just responds `"world"`. We then use the `listener` function to 
 serve the route with the built-in http-server in NodeJS:
 
-```clojurescript
+```clojure
 (require '[jadak.jadak :as jadak])
 
 (def routes
