@@ -27,9 +27,8 @@ serve the route with the built-in http-server in NodeJS:
 (require '[jadak.jadak :as jadak])
 
 (def routes
-  ["/"
-   [["hello" (jadak/resource {:methods {:get {:produces #{"text/plain"}
-                                              :response (fn [_] "world")}}})]]])
+  ["/hello" (jadak/resource {:methods {:get {:produces #{"text/plain"}
+                                             :response (fn [_] "world")}}})])
 
 (jadak/listener
   routes
