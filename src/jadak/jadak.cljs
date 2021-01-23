@@ -242,9 +242,9 @@
                                                 (map->Response {:body response
                                                                 :status 200}))]
                          (assoc response
-                           :headers (merge headers
-                                           (when produce-content-type
-                                             {"content-type" produce-content-type}))
+                           :headers (merge (when produce-content-type
+                                             {"content-type" produce-content-type})
+                                           headers)
                            :body (cond
                                    (or
                                      (is-stream? body)
@@ -368,5 +368,4 @@
     {:server s
      :close  (fn [] (.close s))
      :port   port}))
-
 
