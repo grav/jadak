@@ -42,7 +42,7 @@ serve the route with the built-in http-server in NodeJS:
 We can run it with [Lumo](https://github.com/anmonteiro/lumo) by saving it as `hello.cljs` and running:
 
 ```bash
-$ lumo -c`clojure -Sdeps '{:deps {jadak {:mvn/version "0.1.2"}}}' -Spath` hello.cljs
+$ lumo -c`clojure -Sdeps '{:deps {jadak {:mvn/version "0.1.3"}}}' -Spath` hello.cljs
 ```
 
 Now we can test it using `curl`:
