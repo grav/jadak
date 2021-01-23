@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>jadak</groupId>
   <artifactId>jadak</artifactId>
-  <version>0.1.2</version>
+  <version>0.1.3</version>
   <name>jadak</name>
   <dependencies>
     <dependency>
