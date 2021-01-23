@@ -22,8 +22,22 @@ for executing the ClojureScript code on AWS Lambda.
 You can try out the example here:
 https://uyqbgczps5.execute-api.eu-west-1.amazonaws.com/dev/app
 
+### Deploy to AWS
 
-   
-### TODO 
-- make `publish` script setup the API gateway
-
+The `publish-aws.sh` script deloys the example code,
+but you'll need to:
+1. create a lambda function via the AWS Lambda Web console:
+   - select "Author from scratch"
+   - function name: `jadak-serverless-example`
+   - runtime: "Provide your own bootstrap ..."
+2. create a new API Gateway:
+   - choose type "REST"
+   - create a new resource, configured as `proxy resource`
+   - set the `ANY` method to invoke the `jadak-serverless-example` function
+   - deploy the API to a new stage (eg `dev`)
+   - note down the invoke-url of the stage (eg `https://abc.execute-api.eu-west-1.amazonaws.com/dev/app`)
+3. run the `publish-aws.sh` script
+   - the script pushes the code to AWS and sets the runtime to the
+   [CLJS runtime based on Lumo](https://github.com/grav/aws-lumo-cljs-runtime).
+     
+The example web-app should now be available on the `/app` route of the stage.
