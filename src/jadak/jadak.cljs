@@ -99,11 +99,15 @@
   (->> (clojure.string/split cookie-str #";\s?")
        (map #(clojure.string/split % #"="))
        (into {})))
-(defn process-request-parameters [{:keys                 [headers path query body] :as request} routes]
-  (let [{handler-fn   :handler
+(defn process-request-parameters [{:keys [headers path query body] :as request}
+                                  routes
+                                  & [default-handler]]
+  (let [{handler-fn :handler
          route-params :route-params
-         :or          {handler-fn (constantly {:response {:status 204
-                                                          :body   nil}})}} (bidi.bidi/match-route routes path)
+         :or {handler-fn
+              (or default-handler
+                  (constantly {:response {:status 204
+                                          :body nil}}))}} (bidi.bidi/match-route routes path)
         {{path-params :path} :parameters
          access-control      :access-control
          :as                 ctx} (handler-fn)]
@@ -327,10 +331,10 @@
                               :body    (.toString (js/Buffer.concat body))}]
                  (resolve req-map))))))))
 
-(defn listener [routes {:keys [port]}]
+(defn listener [routes {:keys [port default-handler]}]
   (let [s (http/createServer (fn [req res]
                                (-> (parse-http-request req)
-                                   (.then #(process-request-parameters % routes))
+                                   (.then #(process-request-parameters % routes default-handler))
                                    (.then #(handle-auth %))
                                    (.then handle-client-errors)
                                    (.then handle-request)
