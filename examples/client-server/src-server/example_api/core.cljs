@@ -25,7 +25,13 @@
     ["api/"
      [["hello" (jadak/resource {:methods {:get
                                           {:produces #{"text/plain"}
-                                           :response (constantly "hi!")}}})]]]]])
+                                           :response (constantly "yo")}}})]
+      ["hi" (jadak/resource
+             {:methods {:post
+                        {:consumes #{"text/plain;charset=UTF-8"}
+                         :produces #{"text/plain"}
+                         :response (fn [{:keys [body]}]                              
+                                     (str "hejsa " body))}}})]]]]])
 
 (defn ^:dev/after-load main []
   (let [{{:keys [close]} :server} @!state]
