@@ -315,17 +315,17 @@
   (js/Promise.
     (fn [resolve _reject]
       (let [body #js []]
-        (.on req "data"
-             (fn [chunk]
-               (.push body chunk)))
-        (.on req "end"
-             (fn []
-               (let [req-map {:headers (js->clj (.-headers req))
-                              :path    (.-url req)
-                              :query   (url->query-params (.-url req))
-                              :method  (keyword (clojure.string/lower-case (.-method req)))
-                              :body    (.toString (js/Buffer.concat body))}]
-                 (resolve req-map))))))))
+        ^js (.on req "data"
+                 (fn [chunk]
+                   (.push body chunk)))
+        ^js (.on req "end"
+                 (fn []
+                   (let [req-map {:headers (js->clj (.-headers req))
+                                  :path    (.-url req)
+                                  :query   (url->query-params (.-url req))
+                                  :method  (keyword (clojure.string/lower-case (.-method req)))
+                                  :body    (.toString (js/Buffer.concat body))}]
+                     (resolve req-map))))))))
 
 (defn listener [routes {:keys [port]}]
   (let [s (http/createServer (fn [req res]
@@ -339,9 +339,9 @@
                                               (do
                                                 (let [s body]
                                                   (.on s "open" (fn []
-                                                                  (.writeHead res
-                                                                              status
-                                                                              (clj->js headers))
+                                                                  ^js (.writeHead res
+                                                                                  status
+                                                                                  (clj->js headers))
                                                                   (.pipe s res)))
                                                   (.on s "error" (fn [error]
                                                                    (println 'error error)
@@ -349,19 +349,19 @@
                                                                    (.end res "error!")))))
 
                                               (do
-                                                (.writeHead res
-                                                           status
-                                                           (clj->js (merge headers
-                                                                           (when body {"content-length" (js/Buffer.byteLength body)}))))
+                                                ^js (.writeHead res
+                                                               status
+                                                               (clj->js (merge headers
+                                                                               (when body {"content-length" (js/Buffer.byteLength body)}))))
                                                 (when (seq body)
                                                   (.write res body))
                                                 (.end res)))))
                                    (.catch (fn [ex]
                                              (js/console.error ex)
                                              (let [body (str (.-message ex) "\n")]
-                                               (.writeHead res
-                                                          500
-                                                          (clj->js {"content-length" (js/Buffer.byteLength body)}))
+                                               ^js (.writeHead res
+                                                              500
+                                                              (clj->js {"content-length" (js/Buffer.byteLength body)}))
                                                (.write res body)
                                                (.end res)))))))]
     (.listen s port)
