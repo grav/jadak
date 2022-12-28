@@ -1,5 +1,6 @@
 (ns serverless.core
-  (:require [jadak.jadak :as jadak]
+  (:require [clojure.string] 
+            [jadak.jadak :as jadak]
             [jadak.serverless]))
 
 (defonce appstate (atom {(random-uuid) {:title "buy tickets" :done? false}}))
@@ -50,3 +51,6 @@
 
 (defn aws-lambda-main [opts]
   (jadak.serverless/aws-lambda routes opts))
+
+(defn aws-lambda-main-js [js-event js-context]
+  (jadak.serverless/aws-lambda-js routes js-event js-context))

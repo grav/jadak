@@ -1,0 +1,10 @@
+{:deps {:aliases [:cljs]}
+ :builds {:app {:target :node-script
+                :output-to "target/app.js"
+                :main serverless.core/-main}
+          :lib {:target :node-library 
+                ;; callable from node via
+                ;; lib.main 
+                :exports {:main serverless.core/aws-lambda-main-js}
+                :output-to "target/lib.js"}}}
+

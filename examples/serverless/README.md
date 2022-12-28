@@ -41,3 +41,26 @@ but you'll need to:
    [CLJS runtime based on Lumo](https://github.com/grav/aws-lumo-cljs-runtime).
      
 The example web-app should now be available on the `/app` route of the stage.
+
+### Running with NodeJS runtime
+The example can also be compiled to JavaScript and run
+with the regular NodeJS runtime for AWS Lambda.
+
+To do this, compile with [Shadow CLJS](https://github.com/thheller/shadow-cljs):
+```bash
+$ npm i && npx shadow-cljs release lib
+```
+
+Then, zip the released file to make it uploadable via the AWS Console:
+```bash
+$ zip -j lambda-js.zip lib.js
+```
+
+Then, create a new AWS Lambda function with eg the NodeJS runtime, and
+upload the zip-file.
+
+Change the handler to `lib.main`.
+
+The API Gateway can be configured as with the previous example.
+
+

@@ -30,3 +30,9 @@
           (.then jadak/handle-client-errors)
           (.then jadak/handle-request)
           (.then jadak-response->lambda-response)))
+
+(defn aws-lambda-js [routes js-event js-context]
+  (-> (js/Promise.resolve) 
+      (.then #(aws-lambda routes {:event (js->clj js-event)
+                                  :context (js->clj js-context)}))))
+ 
