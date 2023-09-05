@@ -1,5 +1,6 @@
 {:deps
- {bidi/bidi {:mvn/version "2.1.6"}}
+ {bidi/bidi {:mvn/version "2.1.6"}
+  org.clojure/clojurescript {:mvn/version "1.11.60"}}
  :paths ["src"]
  :aliases {:depstar
            {:replace-deps ; tool usage is new in 2.x
